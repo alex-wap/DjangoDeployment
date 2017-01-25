@@ -13,7 +13,7 @@ In the first 2 steps, we will be navigating around on your local machine.  If yo
 
 ## Step 1: Getting Started
 
-Get started by activating your virtual environment. 
+Get started by activating your virtual environment.
 
 Once you have activated your virtual environment, cd into your project directory.  You will now save all of your installed pip modules in a .txt, so that when you deploy your project, all modules will be automatically installed:
 
@@ -23,7 +23,7 @@ pip freeze > requirements.txt
 
 **In your text editor, open your requirements.txt file and, if they exist, remove pygraphviz, pydot and anything with mysql in it. These modules can be tricky to install and require additional installations, so we remove them now to prevent problems later.**
 
-##Step 2: Committing 
+##Step 2: Committing
 
 **Important!**
 
@@ -43,7 +43,7 @@ Open your `.gitignore` file in your text editor and add the lines:
  *.pyc
  venv/
  ```
-	
+
 We know this is familiar, but here's a reminder of how to initialize a new repo:
 
 ```bash
@@ -71,7 +71,7 @@ Once you login to AWS and set up a cloud server, you'll be pulling code from you
 3. Launch a new instance from the EC2 Dashboard, as shown below:
 ![Alt text](imgs/3_launch_instance.png)
 4. Select *Ubuntu Server 14.04* option.  Be sure to scroll close to the bottom to find the correct version of Ubuntu. The option closest to the top will get you a newer version, which doesn't play well with pip and virtualenv.
-![Alt text](imgs/4_ubuntu_1404.png)
+![Alt text](imgs/4_ubuntu_1604.png)
 5. Select *t2.micro* option and click *Review and Launch*
 ![Alt text](imgs/5_review_launch.png)
 
@@ -83,11 +83,11 @@ Once you login to AWS and set up a cloud server, you'll be pulling code from you
 ![Alt text](imgs/7_add_rule.png)
 3. Click the add a rule button twice to add HTTP and HTTPS, source set to *Anywhere*, and then click ***Click Review and Launch:***
 ![Alt text](imgs/8_completed_rules.png)
-4. You'll be asked to create a key file. This is what will let us connect and control the server from our local machine. 
+4. You'll be asked to create a key file. This is what will let us connect and control the server from our local machine.
 
-	Name your pem key whatever makes the most sense to you as shown in the next step.  Give it a generic name, not the name of your project, as we will be re-using this instance. 
-	
-	The key will automatically be saved to your downloads folder when you click launch instance, but you will want to move it.  See the next item for more information on this critical step. 
+	Name your pem key whatever makes the most sense to you as shown in the next step.  Give it a generic name, not the name of your project, as we will be re-using this instance.
+
+	The key will automatically be saved to your downloads folder when you click launch instance, but you will want to move it.  See the next item for more information on this critical step.
 ![Alt text](imgs/9_download_pem.png)
 5. This next part is very important! Put your pem key in a file that has no chance of ***EVER***  being pushed to github. You should not send this file via email, or in any other way make it publicly available:
 ![Alt text](imgs/1_pem_key_folder_path.png)
@@ -117,6 +117,9 @@ A popup will appear with instructions on how to connect. The commands in red box
 
 **If you are a mac user:**
 Run the chmod command in your terminal.
+
+**If you are a Windows user:**
+SSH is not built into windows. The easiest solution is to use Git Bash or another bash terminal. The other solution requires installation of other 3rd-party software, an SSH client. If you wish to do so, we recommend PuTTY.
 
 **Everyone:**
 Copy and paste the line starting with ssh into your terminal.
@@ -182,7 +185,7 @@ ubuntu@54.162.31.253:~/myRepoName$ source venv/bin/activate
 ### VIM
 If you have used vim before, skip to step 6.
 
-Vim is a terminal based file editor. We will use it to change the necessary files to get our project running. Once the file opens, press `i` to enter INSERT mode. You should see **--INSERT--** at the bottom left corner of your terminal. Now use your arrow keys to move the cursor to where you want to edit and make your changes. 
+Vim is a terminal based file editor. We will use it to change the necessary files to get our project running. Once the file opens, press `i` to enter INSERT mode. You should see **--INSERT--** at the bottom left corner of your terminal. Now use your arrow keys to move the cursor to where you want to edit and make your changes.
 
 Once you are done, press the `esc` key to exit INSERT mode. Type a colon to enter the vim command interface. You should now see a colon at the bottom left corner of your terminal. Now, type `wq` and press `return` to write (save) and quit.
 
@@ -214,7 +217,7 @@ Add the following (this will allow you to serve static content):
 ```python
 # Inside settings.py
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-# Also enter the line below, repalcing {{yourEC2.public.ip}} 
+# Also enter the line below, repalcing {{yourEC2.public.ip}}
 # with your server's public IP address (leave the quotation marks)
 ALLOWED_HOSTS = ['{{yourEC2.public.ip}}']
 ```
@@ -229,60 +232,79 @@ Run `cd ..` to get back to the folder that holds `manage.py`. Make sure your vir
 ```bash
 (venv) ubuntu@54.162.31.253:~myRepoName$ python manage.py collectstatic #say yes
 ```
-## Step 7: Gunicorn 
+## Step 7: Gunicorn
 
-Now let's test gunicorn, make sure you are in your repo folder and then enter the following:
+You may remember that Gunicorn is our process manager. Let's test Gunicorn by directing it to our Django project's wsgi.py file, which is the entry point to our application.
 
-```bash
+Make sure you are in your repo folder and then enter the following:
+
+```
 (venv) ubuntu@54.162.31.253:~myRepoName$ gunicorn --bind 0.0.0.0:8000 {{projectName}}.wsgi:application
 ```
 
-Run `ctrl-c` and `deactivate` your virtual environment.
-
-
-Next, we're going to tell this gunicorn service to start a virtualenv, navigate to and start our project, *all behind the scenes*!
-
-```bash
-ubuntu@54.162.31.253:~myRepoName$ sudo vim /etc/init/gunicorn.conf
-```
-
-Add the following to this empty file, updating the code that's in between curly braces **{{ }}** (this assumes the name of your virtual environment is `venv`).  Don't forget to type `i` before copying and pasting the lines below, otherwise vim may cut off a few characters at the beginning!
+If your Gunicorn process ran correctly, you will see something like the following printed to the terminal:
 
 ```
-description "Gunicorn application server handling our project"
-start on runlevel [2345]
-stop on runlevel [!2345]
-respawn
-setuid ubuntu
-setgid www-data
-chdir /home/ubuntu/{{myRepoName}}
-exec venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/{{myRepoName}}/{{projectName}}.sock {{projectName}}.wsgi:application
+[2016-12-27 05:45:56 +0000] [8695] [INFO] Starting gunicorn 19.6.0
+[2016-12-27 05:45:56 +0000] [8695] [INFO] Listening at: http://0.0.0.0:8000 (8695)
+[2016-12-27 05:45:56 +0000] [8695] [INFO] Using worker: sync
+[2016-12-27 05:45:56 +0000] [8700] [INFO] Booting worker with pid: 8700
 ```
 
-***REMINDER****: myRepoName is the name of the repo you cloned in, projectName is the name of the folder that was used when you ran the django-admin startproject command. This folder is sibling to your apps folder.*
+To exit the process `ctrl-c`
 
-Here's what's actually happening:
-1. `runlevel`s are system configuration bytes (just use 2,3,4,5 as stated on the start, stop)
-2. `respawn` -- if the project stops, restart it
-3. `setuid` -- ubuntu can use this project
-4. `setgid` -- establishes a group
-5. `chdir` -- go to the /home/ubuntu/{yourProject} #This needs to be updated to have your project's name
-6. `exec venv/bin/gunicorn`... -- execute `gunicorn` in your `virtualenv` where you pip installed it. Futhermore, bind some workers to it and activate the `wsgi` file in your main project folder. *Look at these names carefully!*
+Now, `deactivate` your virtual environment.
 
-To turn on or off this process:
+Next, let's set up Gunicorn to run as a service. You'll be using systemd as your init system to manage and control aspects of your server including services. The primary advantage of turning Gunicorn into a service is that Gunicorn will start with the server after being rebooted and once configured will just work.
 
-`sudo service gunicorn start`
+To create a systemd service file that will turn Gunicorn on and off we're going to have to create a systemd service file and make some changes.
 
-`sudo service gunicorn stop`
+Our current folder structure should look like this:
 
-It's time to start your process!  In your terminal, enter the command below:
-
-```bash
-ubuntu@54.162.31.253:~$ sudo service gunicorn start
 ```
-You should see a message confirming that your process has started. 
+~ #home
+  - ubuntu
+    - courses_deployment
+      - Courses
+      - apps
+      - venv
+```
 
-If you see instead a message that your job failed to start, check to make sure your `.conf` file is correct, with no typos, and all pieces that needed to be changed done correctly.
+Enter:
+
+```
+ubuntu@54.162.31.253:~myRepoName$ sudo vim /etc/systemd/system/gunicorn.service
+```
+
+In the vim text editor copy and paste the following code. Don’t forget to type `i` before copying and pasting the lines below, otherwise vim may cut off a few characters at the beginning!
+
+```
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/{{repoName}}
+ExecStart=/home/ubuntu/{{repoName}}/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/{{repoName}}/{{projectName}}.sock {{projectName}}.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+```
+
+***REMINDER:*** *myRepoName is the name of the repo you cloned. projectName is the name of the folder that was used when you ran the django-admin startproject command. This folder is sibling to your apps folder.*
+
+Now that our service file has been created, we can enable it so that it starts on boot with these commands.
+
+```
+ubuntu@54.162.31.253:~$ sudo systemctl daemon-reload
+ubuntu@54.162.31.253:~$ sudo systemctl start gunicorn
+ubuntu@54.162.31.253:~$ sudo systemctl enable gunicorn
+```
+
+*Note:* if any additional changes are made to the gunicorn.service the previous three commands will need to be run in order to sync things up and restart our service.
+
 
 ## Step 8: Nginx
 ---
@@ -337,12 +359,13 @@ Now, all that is left to do is restart your nginx server.
 ```bash
 ubuntu@54.162.31.253:~$ sudo service nginx restart
 ```
+
 If your server restarted correctly, you will see *[OK]* on the right hand side of your terminal, on the same line as your command, and your app is deployed! Go to the public domain and you app should be there. If you see anything other than your app, review your server file for errors.
 
 ## Common errors and how to find them:
 
 * 502, bad gateway: there is a problem in your code. Hint: any error starting with 5 indicates a server error
-* Your gunicorn process won't start:  Check your .conf file; typos and wrong file paths are common mistakes
+* Your gunicorn service won't start:  Check your .service file; typos and wrong file paths are common mistakes
 * Your nginx restart fails: Check your nginx file in the sites-available directory.  Common problems include typos and forgetting to insert your project name where indicated.
 
 
@@ -350,7 +373,7 @@ If your server restarted correctly, you will see *[OK]* on the right hand side o
 
 SQLite is great for testing, but it's not really efficient in the context of real-world use.  This may be a bit too much to go into here, but let's look at a quick summary of why that is, and what we'll use instead.
 
-Although the developers of SQLite have done much to improve its performance, particularly in version 3, it suffers from some lack efficient write concurrency. If your site has a lot of traffic a queue begins to form, waiting for write acess to the database.  Before long, your response speed will slow to a crawl.  This happens only on high-traffic sites, however. 
+Although the developers of SQLite have done much to improve its performance, particularly in version 3, it suffers from some lack efficient write concurrency. If your site has a lot of traffic a queue begins to form, waiting for write acess to the database.  Before long, your response speed will slow to a crawl.  This happens only on high-traffic sites, however.
 
 MySQL databases, on the other hand, are incredibly fast, and very good at performing multiple operations concurrently.  In addition, MySQL can store an incredibly large amount of data, and so is said to scale well.
 
@@ -398,7 +421,7 @@ Now that we have MySQL all set up, we are ready to change some lines in our `set
 
 If you're in your outer project directory, you must cd into the directory containing your `settings.py` file. If you have followed instructions, you will type:
 
-```bash 
+```bash
 >cd {{projectName}}
 >sudo vim settings.py
 ```
@@ -438,4 +461,3 @@ Remember how we said that we would have to change our security settings every ti
 ![Alt text](imgs/15_edit_groups.png)
 3. Now, all that is left to do is let AWS automatically change our IP to the new one. Do this by selecting the dropdown in the SSH row, under source, and select MyIP (it is already selected, but doing so again will refresh your IP to the current one). Once this is done, click save.  Your're ready to SSH into your instance again!
 ![Alt text](imgs/16_update_security_groups.png)
-

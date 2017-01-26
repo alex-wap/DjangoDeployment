@@ -384,18 +384,18 @@ If you'd like to learn how to add a MySQL database to the app we just deployed, 
 First, we'll need to install everything necessary to run MySQL from our deployment machine.
 
 ```bash
->sudo apt-get install libmysqlclient-dev
+ubuntu@54.162.31.253:~$ sudo apt-get install libmysqlclient-dev
 ```
 Let's install mysql-server, then we'll create a MySQL database and database user for our Django application. After running the command below, set your mysql password for root as root.
 
 ```bash
->sudo apt-get install mysql-server
+ubuntu@54.162.31.253:~$ sudo apt-get install mysql-server
 ```
 
 Then let's just make sure that we were able to install it correctly. First we're going to switch over to root user.
 
 ```bash
->sudo su
+ubuntu@54.162.31.253:~$ sudo su
 ```
 
 The su command stand for "switch user". If we don't specify a user, Linux/Unix defaults to root user, which is the administrative user. This command provides access to everything in your system, and therefore can be dangerous if you aren't familiar with the effect of the commands you're using. Be careful not to type any commands other than the following until we exit root user a little later.
@@ -417,13 +417,23 @@ Exit the MySQL prompt by typing `exit;`
 
 That's right, we're typing exit twice.  The first time is to exit the MySQL prompt, the second time is to deactivate the root user.  As we warned above, this is a critical step and can result in some problems with installations if we skip it.
 
-Now that we have MySQL all set up, we are ready to change some lines in our `settings.py` document and we can start working with our MySQL database!
 
 If you're in your outer project directory, you must cd into the directory containing your `settings.py` file. If you have followed instructions, you will type:
 
 ```bash
 >cd {{projectName}}
->sudo vim settings.py
+```
+
+Activate your virtual environment: <code>source venv/bin/activate</code>. Now we just have to install a pip module inside our virtual environment to help connect our python code to our MySQL database:
+
+```
+(venv) ubuntu@54.162.31.253:~$ pip install mysql-python
+```
+
+Now that we have MySQL all set up, we are ready to change some lines in our `settings.py` document and we can start working with our MySQL database!
+
+```bash
+(venv) ubuntu@54.162.31.253:~$ vim settings.py
 ```
 Change your the databases section in settings.py to look like below:
 

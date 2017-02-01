@@ -11,6 +11,31 @@ We're going to use github to create a copy of our project in deployment.
 
 In the first 2 steps, we will be navigating around on your local machine.  If you are using unix(mac), or linux, these commands are for you.  If you are on Windows, you will want to use git bash in order for these commands to run properly.
 
+
+## Step 0: Replace your manage.py file (do not forget to replace PROJECTNAME and 8005 with your project name and port number):
+
+```python
+#!/usr/bin/env python
+import os
+import sys
+
+if __name__ == "__main__":
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "PROJECTNAME.settings")
+    
+    # Different port manage.py file 
+    import django
+    django.setup()
+
+    # Override default port for `runserver` command
+    from django.core.management.commands.runserver import Command as runserver
+    runserver.default_port = "8005"
+
+    from django.core.management import execute_from_command_line
+
+    execute_from_command_line(sys.argv)
+```
+
+
 ## Step 1: Getting Started
 
 Get started by activating your virtual environment.

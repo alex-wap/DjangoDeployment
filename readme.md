@@ -260,7 +260,7 @@ Run `cd ..` to get back to the folder that holds `manage.py`. Make sure your vir
 ## Step 7: Gunicorn
 
 
-**WARNING: If you're running Ubuntu 14.04, follow the commands listed in *Note 2 at the end of Step 7*. If you're running Ubuntu 16.04, continue following instructions. **
+**WARNING: If you're running Ubuntu 14.04, follow the commands listed in _Note 2 at the end of Step 7_. If you're running Ubuntu 16.04, continue following instructions. **
 
 
 You may remember that Gunicorn is our process manager. Let's test Gunicorn by directing it to our Django project's wsgi.py file, which is the entry point to our application.
@@ -334,7 +334,7 @@ ubuntu@54.162.31.253:~$ sudo systemctl enable gunicorn
 
 *Note:* if any additional changes are made to the gunicorn.service the previous three commands will need to be run in order to sync things up and restart our service.
 
-**Note 2: If you're running *Ubuntu 14.04, systemctl is not available. Follow the commands listed below. Otherwise, skip to *Step 8*.**
+**Note 2: If you're running _Ubuntu 14.04_, systemctl is not available. Follow the commands listed below. Otherwise, skip to _Step 8_.**
 
 Enter this command:
 

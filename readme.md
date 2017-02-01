@@ -12,7 +12,7 @@ We're going to use github to create a copy of our project in deployment.
 In the first 2 steps, we will be navigating around on your local machine.  If you are using unix(mac), or linux, these commands are for you.  If you are on Windows, you will want to use git bash in order for these commands to run properly.
 
 ## Overview of Steps
-* **Step 0:** Replace your manage.py file to set PORT
+* **[Step 0](https://github.com/alex-wap/DjangoDeployment#step-0-replace-your-managepy-file-do-not-forget-to-replace-projectname-and-port-with-your-project-name-and-port-number):** Replace your manage.py file to set PORT
 * **Step 1:** Save your installed pip modules in a text file
 * **Step 2:** Push your project to a GitHub repo
 * **Step 3:** Create an EC2 server instance

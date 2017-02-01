@@ -244,7 +244,7 @@ Add the following (this will allow you to serve static content):
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 # Also enter the line below, repalcing {{yourEC2.public.ip}}
 # with your server's public IP address (leave the quotation marks)
-ALLOWED_HOSTS = ['{{yourEC2.public.ip}}']
+ALLOWED_HOSTS = ['{{yourEC2.public.ip}}','YOURSUBDOMAIN.DOMAIN.COM']
 ```
 Once you are finished making these additions, tell the vim program to exit insert mode by pressing the escape key and then type `:wq` to save your changes and quit vim.
 
@@ -329,6 +329,27 @@ ubuntu@54.162.31.253:~$ sudo systemctl enable gunicorn
 ```
 
 *Note:* if any additional changes are made to the gunicorn.service the previous three commands will need to be run in order to sync things up and restart our service.
+
+*Note 2:* If you're running Ubuntu 14.04, systemctl is not available. Follow the commands listed below. Otherwise, move on.
+
+Enter this command:
+```sudo nano /etc/init/gunicorn.conf```
+Paste in gunicorn.conf: 
+```bash
+description "Gunicorn application server handling PROJECT"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+setuid ubuntu
+setgid www-data
+chdir /home/ubuntu/REPONAME
+
+exec venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/REPONAME/PROJECT.sock PROJECT.wsgi:application
+```
+Now, you can run `sudo service gunicorn start`. If you make changes, you can run `sudo service gunicorn restart`
+
 
 
 ## Step 8: Nginx

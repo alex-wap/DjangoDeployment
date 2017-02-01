@@ -20,7 +20,7 @@ In the first 2 steps, we will be navigating around on your local machine.  If yo
 * **[Step 5](http://github.com/alex-wap/DjangoDeployment#step-5-ec2-server-application-configuration):** Configure your EC2 Server Application
 * **[Step 6](http://github.com/alex-wap/DjangoDeployment#step-6-collect-static-files):** Collect Static Files
 * **[Step 7](http://github.com/alex-wap/DjangoDeployment#step-7-gunicorn-ubuntu-1604):** Gunicorn (Ubuntu 16.04)
-* **[Step 7a](http://github.com/alex-wap/DjangoDeployment#step-7a-gunicorn-ubuntu-1404):** Gunicorn (Ubuntu 14.04)
+* **[Step 7a](https://github.com/alex-wap/DjangoDeployment#step-7a-gunicorn-ubuntu-1404):** Gunicorn (Ubuntu 14.04)
 * **[Step 8](http://github.com/alex-wap/DjangoDeployment#step-8-nginx):** Nginx
 * **[Step 9](http://github.com/alex-wap/DjangoDeployment#step-9---finally):** Nginx Troubleshooting
 * **[Step 10](http://github.com/alex-wap/DjangoDeployment#step-10-adding-a-mysql-server-optional):** Add a MySQL server (optional)

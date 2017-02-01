@@ -257,10 +257,10 @@ Run `cd ..` to get back to the folder that holds `manage.py`. Make sure your vir
 ```bash
 (venv) ubuntu@54.162.31.253:~myRepoName$ python manage.py collectstatic #say yes
 ```
-## Step 7: Gunicorn
+## Step 7: Gunicorn (Ubuntu 16.04)
 
 
-**WARNING: If you're running Ubuntu 14.04, follow the commands listed in _Note 2 at the end of Step 7_. If you're running Ubuntu 16.04, continue following instructions. **
+**WARNING: If you're running Ubuntu 14.04, systemctl is not available. Skip to Step 7a. If you're running Ubuntu 16.04, continue following instructions for Step 7.**
 
 
 You may remember that Gunicorn is our process manager. Let's test Gunicorn by directing it to our Django project's wsgi.py file, which is the entry point to our application.
@@ -334,18 +334,39 @@ ubuntu@54.162.31.253:~$ sudo systemctl enable gunicorn
 
 *Note:* if any additional changes are made to the gunicorn.service the previous three commands will need to be run in order to sync things up and restart our service.
 
-**Note 2: If you're running _Ubuntu 14.04_, systemctl is not available. Follow the commands listed below. Otherwise, skip to _Step 8_.**
-
-Enter this command:
+## Step 7a: Gunicorn (Ubuntu 14.04)
 
 
+**WARNING: If you're running Ubuntu 14.04, systemctl is not available. Follow the commands listed below. Otherwise, skip to Step 8.**
 
+
+You may remember that Gunicorn is our process manager. Let's test Gunicorn by directing it to our Django project's wsgi.py file, which is the entry point to our application.
+
+Make sure you are in your repo folder and then enter the following:
+
+```
+(venv) ubuntu@54.162.31.253:~myRepoName$ gunicorn --bind 0.0.0.0:8000 {{projectName}}.wsgi:application
+```
+
+If your Gunicorn process ran correctly, you will see something like the following printed to the terminal:
+
+```
+[2016-12-27 05:45:56 +0000] [8695] [INFO] Starting gunicorn 19.6.0
+[2016-12-27 05:45:56 +0000] [8695] [INFO] Listening at: http://0.0.0.0:8000 (8695)
+[2016-12-27 05:45:56 +0000] [8695] [INFO] Using worker: sync
+[2016-12-27 05:45:56 +0000] [8700] [INFO] Booting worker with pid: 8700
+```
+
+To exit the process `ctrl-c`
+
+Now, `deactivate` your virtual environment.
+
+Next, let's set up Gunicorn to run as a service. The primary advantage of turning Gunicorn into a service is that Gunicorn will start with the server after being rebooted and once configured will just work. We will accomplish this in a gunicorn.conf file.
+
+Create the guicorn.conf in your command line:
 ```sudo nano /etc/init/gunicorn.conf```
 
-
-Paste in gunicorn.conf: 
-
-
+Paste this into your gunicorn.conf (replace PROJECT and REPONAME): 
 ```bash
 description "Gunicorn application server handling PROJECT"
 
@@ -359,6 +380,8 @@ chdir /home/ubuntu/REPONAME
 
 exec venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/REPONAME/PROJECT.sock PROJECT.wsgi:application
 ```
+
+
 Now, you can run `sudo service gunicorn start`. If you make changes, you can run `sudo service gunicorn restart`
 
 

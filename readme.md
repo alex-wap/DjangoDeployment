@@ -13,17 +13,17 @@ In the first 2 steps, we will be navigating around on your local machine.  If yo
 
 ## Overview of Steps
 * **[Step 0](http://github.com/alex-wap/DjangoDeployment#step-0-replace-your-managepy-file-do-not-forget-to-replace-projectname-and-port-with-your-project-name-and-port-number):** Replace your manage.py file to set PORT
-* **Step 1:** Save your installed pip modules in a text file
-* **Step 2:** Push your project to a GitHub repo
-* **Step 3:** Create an EC2 server instance
-* **Step 4:** Connect to your remote server
-* **Step 5:** Configure your EC2 Server Application
-* **Step 6:** Collect Static Files
-* **Step 7:** Gunicorn (Ubuntu 16.04)
-* **Step 7a:** Gunicorn (Ubuntu 14.04)
-* **Step 8:** Nginx
-* **Step 9:** Nginx Troubleshooting
-* **Step 10:** Add a MySQL server (optional)
+* **[Step 1](http://github.com/alex-wap/DjangoDeployment#step-1-getting-started):** Save your installed pip modules in a text file
+* **[Step 2](http://github.com/alex-wap/DjangoDeployment#step-2-committing):** Push your project to a GitHub repo
+* **[Step 3](http://github.com/alex-wap/DjangoDeployment#step-3-creating-an-ec2-server-instance):** Create an EC2 server instance
+* **[Step 4](http://github.com/alex-wap/DjangoDeployment#step-4-connecting-to-your-remote-server):** Connect to your remote server
+* **[Step 5](http://github.com/alex-wap/DjangoDeployment#step-5-ec2-server-application-configuration):** Configure your EC2 Server Application
+* **[Step 6](http://github.com/alex-wap/DjangoDeployment#step-6-collect-static-files):** Collect Static Files
+* **[Step 7](http://github.com/alex-wap/DjangoDeployment#step-7-gunicorn-ubuntu-1604):** Gunicorn (Ubuntu 16.04)
+* **[Step 7a](http://github.com/alex-wap/DjangoDeployment#step-7a-gunicorn-ubuntu-1404):** Gunicorn (Ubuntu 14.04)
+* **[Step 8](http://github.com/alex-wap/DjangoDeployment#step-8-nginx):** Nginx
+* **[Step 9](http://github.com/alex-wap/DjangoDeployment#step-9---finally):** Nginx Troubleshooting
+* **[Step 10](http://github.com/alex-wap/DjangoDeployment#step-10-adding-a-mysql-server-optional):** Add a MySQL server (optional)
 
 ## Step 0: Replace your manage.py file (do not forget to replace PROJECTNAME and PORT with your project name and port number):
 

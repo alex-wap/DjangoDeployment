@@ -330,11 +330,18 @@ ubuntu@54.162.31.253:~$ sudo systemctl enable gunicorn
 
 *Note:* if any additional changes are made to the gunicorn.service the previous three commands will need to be run in order to sync things up and restart our service.
 
-*Note 2:* If you're running Ubuntu 14.04, systemctl is not available. Follow the commands listed below. Otherwise, move on.
+**Note 2: If you're running Ubuntu 14.04, systemctl is not available. Follow the commands listed below. Otherwise, move on.**
 
 Enter this command:
+
+
+
 ```sudo nano /etc/init/gunicorn.conf```
+
+
 Paste in gunicorn.conf: 
+
+
 ```bash
 description "Gunicorn application server handling PROJECT"
 

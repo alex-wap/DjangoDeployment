@@ -337,7 +337,7 @@ ubuntu@54.162.31.253:~$ sudo systemctl enable gunicorn
 ## Step 7a: Gunicorn (Ubuntu 14.04)
 
 
-**WARNING: If you're running Ubuntu 14.04, systemctl is not available. Follow the commands listed below. Otherwise, skip to Step 8.**
+**WARNING: If you're running Ubuntu 16.04, you will use systemctl. Follow the commands listed in Step 7.**
 
 
 You may remember that Gunicorn is our process manager. Let's test Gunicorn by directing it to our Django project's wsgi.py file, which is the entry point to our application.

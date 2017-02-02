@@ -23,7 +23,10 @@ In the first 2 steps, we will be navigating around on your local machine.  If yo
 * **[Step 7a](https://github.com/alex-wap/DjangoDeployment#step-7a-gunicorn-ubuntu-1404):** Gunicorn (Ubuntu 14.04)
 * **[Step 8](https://github.com/alex-wap/DjangoDeployment#step-8-nginx):** Nginx
 * **[Step 9](https://github.com/alex-wap/DjangoDeployment#step-9---finally):** Nginx Troubleshooting
+  * [Internal Server Error 500](https://github.com/alex-wap/DjangoDeployment#internal-server-error-500:)
+  * [Bad Gateway 502](https://github.com/alex-wap/DjangoDeployment#bad-gateway-502:)
 * **[Step 10](https://github.com/alex-wap/DjangoDeployment#step-10-adding-a-mysql-server-optional):** Add a MySQL server (optional)
+
 
 ## Step 0: Replace your manage.py file (do not forget to replace PROJECTNAME and PORT with your project name and port number):
 
@@ -457,9 +460,78 @@ If your server restarted correctly, you will see *[OK]* on the right hand side o
 
 ## Common errors and how to find them:
 
-* 502, bad gateway: there is a problem in your code. Hint: any error starting with 5 indicates a server error
-* Your gunicorn service won't start:  Check your .service file; typos and wrong file paths are common mistakes
-* Your nginx restart fails: Check your nginx file in the sites-available directory.  Common problems include typos and forgetting to insert your project name where indicated.
+### Internal Server Error 500:
+* Most of the time, it's a database error. Follow the instructions below:
+1. Remove sqllite file: `rm db.sqlite3`
+2. Remove migrations folder: `rm -rf apps/APPNAME/migrations`
+3. `python manage.py makemigrations APPNAME`
+4. `python manage.py migrate`
+5. `python manage.py runserver`
+6. Control+C if there is no problem.
+7.
+8.
+
+### Bad Gateway 502:
+* Most of time, it's a problem with your file paths. Follow the instructions below:
+* Check your gunicorn.service file first (Ubuntu 16.04):
+* `sudo vim /etc/systemd/system/gunicorn.service`
+* Check REPONAME, PROJECTNAME, and the location of your venv directory:
+```bash
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/REPONAME
+ExecStart=/home/ubuntu/REPONAME/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/REPONAME/PROJECTNAME.sock PROJECTNAME.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+```
+* Check your gunicorn.conf file first (Ubuntu 14.04):
+* ```sudo vim /etc/init/gunicorn.conf```
+* Check PROJECTNAME, REPONAME, and the location of your venv directory:
+```bash
+description "Gunicorn application server handling PROJECTNAME"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+setuid ubuntu
+setgid www-data
+chdir /home/ubuntu/REPONAME
+
+exec venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/REPONAME/PROJECTNAME.sock PROJECTNAME.wsgi:application
+```
+```
+* Next, check your nginx file:
+* `sudo vim /etc/nginx/sites-available/PROJECTNAME`
+* Check IP_ADDRESS, REPONAME, and PROJECTNAME:
+```bash
+server {
+    listen 80;
+    server_name IP_ADDRESS; # This should be just the digits from AWS public ip!
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/ubuntu/REPONAME;
+    }
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/ubuntu/REPONAME/PROJECTNAME.sock;
+    }
+}
+* Restart gunicorn (Ubuntu 16.04): 
+```bash
+sudo systemctl daemon-reload
+sudo systemctl start gunicorn
+sudo systemctl enable gunicorn
+```
+* Restart gunicorn (Ubuntu 14.04): `sudo service gunicorn restart`
+* Restart nginx: `sudo service nginx restart`
+
 
 
 ## Step 10: Adding a MySQL server (optional)

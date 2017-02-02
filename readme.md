@@ -473,7 +473,7 @@ If your server restarted correctly, you will see *[OK]* on the right hand side o
 
 ### Bad Gateway 502:
 * Most of time, it's a problem with your file paths. Follow the instructions below:
-* Check your gunicorn.service file first (Ubuntu 16.04):
+* Check your gunicorn.service file first **(Ubuntu 16.04)**:
 * `sudo vim /etc/systemd/system/gunicorn.service`
 * Check REPONAME, PROJECTNAME, and the location of your venv directory:
 ```bash
@@ -490,7 +490,7 @@ ExecStart=/home/ubuntu/REPONAME/venv/bin/gunicorn --workers 3 --bind unix:/home/
 [Install]
 WantedBy=multi-user.target
 ```
-* Check your gunicorn.conf file first (Ubuntu 14.04):
+* Check your gunicorn.conf file first **(Ubuntu 14.04)**:
 * ```sudo vim /etc/init/gunicorn.conf```
 * Check PROJECTNAME, REPONAME, and the location of your venv directory:
 ```bash
@@ -523,6 +523,7 @@ server {
         proxy_pass http://unix:/home/ubuntu/REPONAME/PROJECTNAME.sock;
     }
 }
+```
 * Restart gunicorn **(Ubuntu 16.04)**: 
 ```bash
 sudo systemctl daemon-reload

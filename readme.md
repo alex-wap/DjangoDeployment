@@ -462,20 +462,22 @@ If your server restarted correctly, you will see *[OK]* on the right hand side o
 
 ### Internal Server Error 500:
 * Most of the time, it's a database error. Follow the instructions below:
-1. Remove sqllite file: `rm db.sqlite3`
-2. Remove migrations folder: `rm -rf apps/APPNAME/migrations`
-3. `python manage.py makemigrations APPNAME`
-4. `python manage.py migrate`
-5. `python manage.py runserver`
-6. Control+C if there is no problem.
-7.
-8.
+* cd into your repo: `cd ~/REPONAME`
+* Remove sqllite file: `rm db.sqlite3`
+* Remove migrations folder: `rm -rf apps/APPNAME/migrations`
+* `python manage.py makemigrations APPNAME`
+* `python manage.py migrate`
+* `python manage.py runserver`
+* Control+C if there is no problem.
+* Restart gunicorn **(Ubuntu 16.04)**: `sudo systemctl daemon-reload;sudo systemctl start gunicorn;sudo systemctl enable gunicorn`
+* Restart gunicorn **(Ubuntu 14.04)**: `sudo service gunicorn restart`
+* Restart nginx: `sudo service nginx restart`
 
 ### Bad Gateway 502:
 * Most of time, it's a problem with your file paths. Follow the instructions below:
 * Check your gunicorn.service file first **(Ubuntu 16.04)**:
-* `sudo vim /etc/systemd/system/gunicorn.service`
-* Check REPONAME, PROJECTNAME, and the location of your venv directory:
+  * `sudo vim /etc/systemd/system/gunicorn.service`
+  * Check REPONAME, PROJECTNAME, and the location of your venv directory:
 ```bash
 [Unit]
 Description=gunicorn daemon
@@ -491,8 +493,8 @@ ExecStart=/home/ubuntu/REPONAME/venv/bin/gunicorn --workers 3 --bind unix:/home/
 WantedBy=multi-user.target
 ```
 * Check your gunicorn.conf file first **(Ubuntu 14.04)**:
-* ```sudo vim /etc/init/gunicorn.conf```
-* Check PROJECTNAME, REPONAME, and the location of your venv directory:
+  * ```sudo vim /etc/init/gunicorn.conf```
+  * Check PROJECTNAME, REPONAME, and the location of your venv directory:
 ```bash
 description "Gunicorn application server handling PROJECTNAME"
 
@@ -506,10 +508,9 @@ chdir /home/ubuntu/REPONAME
 
 exec venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/REPONAME/PROJECTNAME.sock PROJECTNAME.wsgi:application
 ```
-```
 * Next, check your nginx file:
-* `sudo vim /etc/nginx/sites-available/PROJECTNAME`
-* Check IP_ADDRESS, REPONAME, and PROJECTNAME:
+  * `sudo vim /etc/nginx/sites-available/PROJECTNAME`
+  * Check IP_ADDRESS, REPONAME, and PROJECTNAME:
 ```bash
 server {
     listen 80;

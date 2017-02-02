@@ -465,10 +465,12 @@ If your server restarted correctly, you will see *[OK]* on the right hand side o
 * cd into your repo: `cd ~/REPONAME`
 * Remove sqllite file: `rm db.sqlite3`
 * Remove migrations folder: `rm -rf apps/APPNAME/migrations`
+* Activate your venv: `source venv/bin/activate`
 * `python manage.py makemigrations APPNAME`
 * `python manage.py migrate`
 * `python manage.py runserver`
 * Control+C if there is no problem.
+* Deactivate your venv: `deactivate`
 * Restart gunicorn **(Ubuntu 16.04)**: `sudo systemctl daemon-reload;sudo systemctl start gunicorn;sudo systemctl enable gunicorn`
 * Restart gunicorn **(Ubuntu 14.04)**: `sudo service gunicorn restart`
 * Restart nginx: `sudo service nginx restart`

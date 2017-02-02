@@ -23,8 +23,8 @@ In the first 2 steps, we will be navigating around on your local machine.  If yo
 * **[Step 7a](https://github.com/alex-wap/DjangoDeployment#step-7a-gunicorn-ubuntu-1404):** Gunicorn (Ubuntu 14.04)
 * **[Step 8](https://github.com/alex-wap/DjangoDeployment#step-8-nginx):** Nginx
 * **[Step 9](https://github.com/alex-wap/DjangoDeployment#step-9---finally):** Nginx Troubleshooting
-  * [Internal Server Error 500](https://github.com/alex-wap/DjangoDeployment#internal-server-error-500:)
-  * [Bad Gateway 502](https://github.com/alex-wap/DjangoDeployment#bad-gateway-502:)
+  * [Internal Server Error 500](https://github.com/alex-wap/DjangoDeployment#internal-server-error-500)
+  * [Bad Gateway 502](https://github.com/alex-wap/DjangoDeployment#bad-gateway-502)
 * **[Step 10](https://github.com/alex-wap/DjangoDeployment#step-10-adding-a-mysql-server-optional):** Add a MySQL server (optional)
 
 

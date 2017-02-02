@@ -523,13 +523,13 @@ server {
         proxy_pass http://unix:/home/ubuntu/REPONAME/PROJECTNAME.sock;
     }
 }
-* Restart gunicorn (Ubuntu 16.04): 
+* Restart gunicorn **(Ubuntu 16.04)**: 
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl start gunicorn
 sudo systemctl enable gunicorn
 ```
-* Restart gunicorn (Ubuntu 14.04): `sudo service gunicorn restart`
+* Restart gunicorn **(Ubuntu 14.04)**: `sudo service gunicorn restart`
 * Restart nginx: `sudo service nginx restart`
 
 
